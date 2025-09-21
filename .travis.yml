@@ -1,0 +1,28 @@
+# Travis CI configuration file for COMP3104
+language: node_js
+node_js:
+  - "16"
+
+os:
+  - linux
+
+branches:
+  only:
+    - main
+    - master
+
+before_script:
+  - echo "Starting Travis CI build for COMP3104"
+  - date
+
+script:
+  - echo "Hello from Travis CI!"
+  - echo "Build running on branch $TRAVIS_BRANCH"
+  - echo "Build number: $TRAVIS_BUILD_NUMBER"
+  - node --version
+  - npm --version
+  - ls -la
+  - npm test
+
+after_success:
+  - echo "Build completed successfully!"

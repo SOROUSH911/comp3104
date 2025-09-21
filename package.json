@@ -1,0 +1,16 @@
+{
+  "name": "comp3104",
+  "version": "1.0.0",
+  "description": "COMP3104 DevOps Course Repository",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Test passed for COMP3104!\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SOROUSH911/comp3104.git"
+  },
+  "keywords": ["devops", "comp3104", "gbc"],
+  "author": "Soroush Salari",
+  "license": "MIT"
+}
