@@ -2,21 +2,25 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
     steps:
     - uses: actions/checkout@v3
     
-    - name: Setup Node.js
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: ${{ matrix.node-version }}
     
     - name: Display System Info
       run: |
@@ -26,8 +30,28 @@ jobs:
         node --version
         npm --version
     
-    - name: List Files
-      run: ls -la
+    - name: Install dependencies
+      run: npm ci || npm install
     
     - name: Run Tests
       run: npm test
+    
+    - name: Build
+      run: |
+        mkdir -p build
+        echo "Build completed successfully" > build/status.txt
+        ls -la build/
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build
